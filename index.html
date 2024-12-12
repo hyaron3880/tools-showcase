@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>כלים פיננסיים</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+</head>
+<body class="light-mode">
+    <div class="container">
+        <header class="animate__animated animate__fadeIn">
+            <div class="header-top">
+                <button id="theme-toggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                    <span>מצב לילה</span>
+                </button>
+                <div class="search-container">
+                    <input type="text" id="search-tools" placeholder="חיפוש כלים..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
+            <h1>סט כלים פיננסיים</h1>
+            <p class="subtitle">גלה את מגוון הכלים הפיננסיים שלנו</p>
+        </header>
+
+        <nav class="tools-nav animate__animated animate__fadeInUp">
+            <button class="nav-btn active" data-tool="tax" data-views="1250">
+                <span>מחשבון פריסת מס</span>
+                <div class="tool-stats">
+                    <i class="fas fa-eye"></i>
+                    <span class="views-count">1,250</span>
+                </div>
+            </button>
+            <button class="nav-btn" data-tool="salary" data-views="980">
+                <span>מחשבון שכר</span>
+                <div class="tool-stats">
+                    <i class="fas fa-eye"></i>
+                    <span class="views-count">980</span>
+                </div>
+            </button>
+            <button class="nav-btn" data-tool="chatbot" data-views="2100">
+                <span>יועץ פרישה AI</span>
+                <div class="tool-stats">
+                    <i class="fas fa-eye"></i>
+                    <span class="views-count">2,100</span>
+                </div>
+            </button>
+        </nav>
+
+        <main class="showcase animate__animated animate__fadeInUp">
+            <div class="tool-container active" id="tax-calculator">
+                <div class="tool-header">
+                    <h2>מחשבון פריסת מס</h2>
+                    <button class="share-btn" data-tool="tax">
+                        <i class="fas fa-share-alt"></i>
+                        <span>שתף</span>
+                    </button>
+                </div>
+                <div class="iframe-container">
+                    <div class="iframe-placeholder" data-src="https://hyaron3880.github.io/tax-spread-cal/"></div>
+                </div>
+            </div>
+
+            <div class="tool-container" id="salary-calculator">
+                <div class="tool-header">
+                    <h2>מחשבון שכר</h2>
+                    <button class="share-btn" data-tool="salary">
+                        <i class="fas fa-share-alt"></i>
+                        <span>שתף</span>
+                    </button>
+                </div>
+                <div class="iframe-container">
+                    <div class="iframe-placeholder" data-src="https://hyaron3880.github.io/salary-calculator/"></div>
+                </div>
+            </div>
+
+            <div class="tool-container" id="ai-chatbot">
+                <div class="tool-header">
+                    <h2>יועץ פרישה חכם</h2>
+                    <button class="share-btn" data-tool="chatbot">
+                        <i class="fas fa-share-alt"></i>
+                        <span>שתף</span>
+                    </button>
+                </div>
+                <div class="iframe-container">
+                    <div class="iframe-placeholder" data-src="https://www.chatbase.co/chatbot-iframe/bUwu1wX2jFr3xa8QJ9ouw"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="share-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>שתף כלי</h3>
+            <div class="share-options">
+                <button class="share-option" data-platform="whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </button>
+                <button class="share-option" data-platform="telegram">
+                    <i class="fab fa-telegram"></i>
+                    <span>Telegram</span>
+                </button>
+                <button class="share-option" data-platform="email">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email</span>
+                </button>
+                <button class="share-option" data-platform="copy">
+                    <i class="fas fa-copy"></i>
+                    <span>העתק קישור</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
