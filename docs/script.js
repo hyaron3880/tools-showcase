@@ -77,10 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         button.classList.add('active');
 
-        const toolId = `${button.dataset.tool}-calculator`;
-        const targetContainer = button.dataset.tool === 'chatbot' 
-            ? document.getElementById('ai-chatbot')
-            : document.getElementById(toolId);
+        const toolId = button.dataset.tool === 'chatbot' 
+            ? 'ai-chatbot'
+            : button.dataset.tool === 'refund'
+                ? 'tax-refund'
+                : `${button.dataset.tool}-calculator`;
+        const targetContainer = document.getElementById(toolId);
 
         void targetContainer.offsetWidth;
         targetContainer.classList.add('active');
