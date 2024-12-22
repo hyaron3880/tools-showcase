@@ -6,7 +6,6 @@ A modern, responsive showcase for financial tools including:
 - AI Retirement Assistant
 - Tax Refund Form
 - Compound Interest Calculator
-- Stock Performance Tracker
 
 ## Features
 - Dark/Light mode toggle

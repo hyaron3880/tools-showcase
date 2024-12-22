@@ -12,50 +12,62 @@
 <body class="light-mode">
     <div class="container">
         <header class="animate__animated animate__fadeIn">
-            <div class="header-top">
+            <div class="header-controls">
                 <button id="theme-toggle" class="theme-toggle">
                     <i class="fas fa-moon"></i>
                     <span>מצב לילה</span>
                 </button>
-                <div class="search-container">
-                    <input type="text" id="search-tools" placeholder="חיפוש כלים..." class="search-input">
-                    <i class="fas fa-search search-icon"></i>
-                </div>
+                <button id="layout-toggle" class="layout-toggle">
+                    <i class="fas fa-columns"></i>
+                    <span>תצוגת צד</span>
+                </button>
+                <button id="auth-button" class="auth-button">
+                    <i class="fas fa-user"></i>
+                    <span>התחבר</span>
+                </button>
             </div>
-            <h1>סט כלים פיננסיים</h1>
-            <p class="subtitle">גלה את מגוון הכלים הפיננסיים שלנו</p>
+            <div class="header-content">
+                <h1>סט כלים פיננסיים</h1>
+                <p class="subtitle">מערכת מתקדמת לניהול וחישוב זכויות פיננסיות</p>
+            </div>
+            <nav class="tools-nav animate__animated animate__fadeInUp">
+                <button class="nav-btn active" data-tool="tax" data-views="1250">
+                    <span>מחשבון פריסת מס</span>
+                    <div class="tool-stats">
+                        <i class="fas fa-eye"></i>
+                        <span class="views-count">1,256</span>
+                    </div>
+                </button>
+                <button class="nav-btn" data-tool="rights" data-views="0">
+                    <span>מחשבון קיבוע זכויות</span>
+                    <div class="tool-stats">
+                        <i class="fas fa-eye"></i>
+                        <span class="views-count">7</span>
+                    </div>
+                </button>
+                <button class="nav-btn" data-tool="salary" data-views="980">
+                    <span>מחשבון שכר</span>
+                    <div class="tool-stats">
+                        <i class="fas fa-eye"></i>
+                        <span class="views-count">987</span>
+                    </div>
+                </button>
+                <button class="nav-btn" data-tool="chatbot" data-views="2100">
+                    <span>יועץ פרישה AI</span>
+                    <div class="tool-stats">
+                        <i class="fas fa-eye"></i>
+                        <span class="views-count">2,107</span>
+                    </div>
+                </button>
+                <button class="nav-btn" data-tool="refund" data-views="0">
+                    <span>טופס החזר מס</span>
+                    <div class="tool-stats">
+                        <i class="fas fa-eye"></i>
+                        <span class="views-count">5</span>
+                    </div>
+                </button>
+            </nav>
         </header>
-
-        <nav class="tools-nav animate__animated animate__fadeInUp">
-            <button class="nav-btn active" data-tool="tax" data-views="1250">
-                <span>מחשבון פריסת מס</span>
-                <div class="tool-stats">
-                    <i class="fas fa-eye"></i>
-                    <span class="views-count">1,250</span>
-                </div>
-            </button>
-            <button class="nav-btn" data-tool="salary" data-views="980">
-                <span>מחשבון שכר</span>
-                <div class="tool-stats">
-                    <i class="fas fa-eye"></i>
-                    <span class="views-count">980</span>
-                </div>
-            </button>
-            <button class="nav-btn" data-tool="chatbot" data-views="2100">
-                <span>יועץ פרישה AI</span>
-                <div class="tool-stats">
-                    <i class="fas fa-eye"></i>
-                    <span class="views-count">2,100</span>
-                </div>
-            </button>
-            <button class="nav-btn" data-tool="refund" data-views="0">
-                <span>טופס החזר מס</span>
-                <div class="tool-stats">
-                    <i class="fas fa-eye"></i>
-                    <span class="views-count">0</span>
-                </div>
-            </button>
-        </nav>
 
         <main class="showcase animate__animated animate__fadeInUp">
             <div class="tool-container active" id="tax-calculator">
@@ -66,9 +78,18 @@
                         <span>שתף</span>
                     </button>
                 </div>
-                <div class="iframe-container">
-                    <div class="iframe-placeholder" data-src="https://hyaron3880.github.io/tax-spread-cal/"></div>
+                <div class="iframe-placeholder" data-src="https://hyaron3880.github.io/tax-spread-cal/"></div>
+            </div>
+
+            <div class="tool-container" id="rights-calculator">
+                <div class="tool-header">
+                    <h2>מחשבון קיבוע זכויות</h2>
+                    <button class="share-btn" data-tool="rights">
+                        <i class="fas fa-share-alt"></i>
+                        <span>שתף</span>
+                    </button>
                 </div>
+                <div class="iframe-placeholder" data-src="https://hyaron3880.github.io/rights-calculations/"></div>
             </div>
 
             <div class="tool-container" id="salary-calculator">
@@ -79,25 +100,21 @@
                         <span>שתף</span>
                     </button>
                 </div>
-                <div class="iframe-container">
-                    <div class="iframe-placeholder" data-src="https://hyaron3880.github.io/salary-calculator/"></div>
-                </div>
+                <div class="iframe-placeholder" data-src="https://hyaron3880.github.io/salary-calculator/"></div>
             </div>
 
-            <div class="tool-container" id="ai-chatbot">
+            <div class="tool-container" id="chatbot-tool">
                 <div class="tool-header">
-                    <h2>יועץ פרישה חכם</h2>
+                    <h2>יועץ פרישה AI</h2>
                     <button class="share-btn" data-tool="chatbot">
                         <i class="fas fa-share-alt"></i>
                         <span>שתף</span>
                     </button>
                 </div>
-                <div class="iframe-container">
-                    <div class="iframe-placeholder" data-src="https://www.chatbase.co/chatbot-iframe/bUwu1wX2jFr3xa8QJ9ouw"></div>
-                </div>
+                <div class="iframe-placeholder" data-src="https://www.chatbase.co/chatbot-iframe/bUwu1wX2jFr3xa8QJ9ouw"></div>
             </div>
 
-            <div class="tool-container" id="tax-refund">
+            <div class="tool-container" id="refund-form">
                 <div class="tool-header">
                     <h2>טופס החזר מס</h2>
                     <button class="share-btn" data-tool="refund">
@@ -105,14 +122,11 @@
                         <span>שתף</span>
                     </button>
                 </div>
-                <div class="iframe-container">
-                    <div class="iframe-placeholder" data-src="https://hyaron3880.github.io/tax-refund-form"></div>
-                </div>
+                <div class="iframe-placeholder" data-src="https://hyaron3880.github.io/tax-refund-form"></div>
             </div>
         </main>
     </div>
 
-    <!-- Share Modal -->
     <div id="share-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
@@ -137,6 +151,63 @@
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <div id="auth-modal" class="auth-modal">
+        <div class="auth-modal-content">
+            <button class="close-auth-modal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">התחברות</button>
+                <button class="auth-tab" data-tab="register">הרשמה</button>
+            </div>
+            
+            <div class="auth-form-container">
+                <!-- Login Form -->
+                <form id="login-form" class="auth-form active">
+                    <button type="button" class="google-auth-btn">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                        התחבר עם Google
+                    </button>
+                    
+                    <div class="divider">או</div>
+                    
+                    <div class="form-group">
+                        <input type="email" id="login-email" placeholder="אימייל" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="login-password" placeholder="סיסמה" required>
+                    </div>
+                    <button type="submit" class="auth-submit">התחבר</button>
+                    <button type="button" class="forgot-password">שכחת סיסמה?</button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="register-form" class="auth-form">
+                    <button type="button" class="google-auth-btn">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                        הרשם עם Google
+                    </button>
+                    
+                    <div class="divider">או</div>
+                    
+                    <div class="form-group">
+                        <input type="text" id="register-name" placeholder="שם מלא" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="register-email" placeholder="אימייל" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="register-password" placeholder="סיסמה" required>
+                    </div>
+                    <button type="submit" class="auth-submit">הרשם</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>

@@ -1,158 +1,224 @@
+import { showAuthModal, hideAuthModal, signOutUser } from './auth.js';
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize variables
+    const themeToggle = document.getElementById('theme-toggle');
+    const layoutToggle = document.getElementById('layout-toggle');
+    const container = document.querySelector('.container');
     const navButtons = document.querySelectorAll('.nav-btn');
     const toolContainers = document.querySelectorAll('.tool-container');
-    const searchInput = document.getElementById('search-tools');
-    const themeToggle = document.getElementById('theme-toggle');
     const shareButtons = document.querySelectorAll('.share-btn');
     const modal = document.getElementById('share-modal');
     const closeModal = document.querySelector('.close-modal');
     const shareOptions = document.querySelectorAll('.share-option');
+    
+    // Check if device is mobile
+    const isMobile = () => window.innerWidth <= 768;
 
-    // Theme Toggle
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        const icon = themeToggle.querySelector('i');
-        const text = themeToggle.querySelector('span');
-        
-        if (document.body.classList.contains('dark-mode')) {
-            icon.className = 'fas fa-sun';
-            text.textContent = 'מצב יום';
+    // Force list view on mobile
+    const checkMobileView = () => {
+        if (isMobile()) {
+            container.classList.add('sidebar-layout');
+            localStorage.setItem('layout', 'sidebar');
         } else {
-            icon.className = 'fas fa-moon';
-            text.textContent = 'מצב לילה';
+            // Restore saved layout on desktop
+            const savedLayout = localStorage.getItem('layout');
+            container.classList.toggle('sidebar-layout', savedLayout === 'sidebar');
+            if (savedLayout === 'sidebar') {
+                layoutToggle.querySelector('i').className = 'fas fa-table';
+                layoutToggle.querySelector('span').textContent = 'תצוגת רשת';
+            }
+        }
+    };
+
+    // Layout toggle functionality (only works on desktop)
+    layoutToggle.addEventListener('click', () => {
+        if (!isMobile()) {
+            container.classList.toggle('sidebar-layout');
+            const isSidebar = container.classList.contains('sidebar-layout');
+            const icon = layoutToggle.querySelector('i');
+            const text = layoutToggle.querySelector('span');
+            
+            if (isSidebar) {
+                icon.className = 'fas fa-table';
+                text.textContent = 'תצוגת רשת';
+                localStorage.setItem('layout', 'sidebar');
+            } else {
+                icon.className = 'fas fa-columns';
+                text.textContent = 'תצוגת צד';
+                localStorage.setItem('layout', 'grid');
+            }
         }
     });
 
-    // Search Functionality
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
+    // Check mobile view on load and resize
+    checkMobileView();
+    window.addEventListener('resize', checkMobileView);
+
+    // Theme toggle functionality
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        const icon = themeToggle.querySelector('i');
+        const text = themeToggle.querySelector('span');
         
-        navButtons.forEach(button => {
-            const toolName = button.querySelector('span').textContent.toLowerCase();
-            if (toolName.includes(searchTerm)) {
-                button.style.display = 'block';
-            } else {
-                button.style.display = 'none';
-            }
-        });
+        if (isDarkMode) {
+            icon.className = 'fas fa-sun';
+            text.textContent = 'מצב יום';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            icon.className = 'fas fa-moon';
+            text.textContent = 'מצב לילה';
+            localStorage.setItem('theme', 'light');
+        }
     });
 
-    // Lazy Loading
-    const observerOptions = {
-        root: null,
-        rootMargin: '50px',
-        threshold: 0.1
-    };
-
-    const loadIframe = (placeholder) => {
-        const iframe = document.createElement('iframe');
-        iframe.src = placeholder.dataset.src;
-        iframe.frameBorder = '0';
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        placeholder.parentNode.replaceChild(iframe, placeholder);
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                loadIframe(entry.target);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.iframe-placeholder').forEach(placeholder => {
-        observer.observe(placeholder);
-    });
-
-    // Tool Switching
-    function switchTool(button) {
-        navButtons.forEach(btn => btn.classList.remove('active'));
-        toolContainers.forEach(container => {
-            container.classList.remove('active');
-            container.style.opacity = '0';
-            container.style.transform = 'translateX(20px)';
-        });
-
-        button.classList.add('active');
-
-        const toolId = button.dataset.tool === 'chatbot' 
-            ? 'ai-chatbot'
-            : button.dataset.tool === 'refund'
-                ? 'tax-refund'
-                : `${button.dataset.tool}-calculator`;
-        const targetContainer = document.getElementById(toolId);
-
-        void targetContainer.offsetWidth;
-        targetContainer.classList.add('active');
-        
-        setTimeout(() => {
-            targetContainer.style.opacity = '1';
-            targetContainer.style.transform = 'translateX(0)';
-        }, 50);
-
-        // Update view count
-        const viewsCount = button.querySelector('.views-count');
-        const currentViews = parseInt(viewsCount.textContent.replace(',', ''));
-        viewsCount.textContent = (currentViews + 1).toLocaleString();
+    // Check saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.querySelector('i').className = 'fas fa-sun';
+        themeToggle.querySelector('span').textContent = 'מצב יום';
     }
 
+    // Navigation functionality with auth check
     navButtons.forEach(button => {
-        button.addEventListener('click', () => switchTool(button));
+        button.addEventListener('click', () => {
+            if (button.classList.contains('locked')) {
+                showAuthModal();
+                return;
+            }
+
+            const toolId = button.dataset.tool;
+            
+            // Update active states
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Hide all tools first
+            toolContainers.forEach(container => {
+                container.classList.remove('active');
+                container.style.display = 'none';
+            });
+            
+            // Show selected tool
+            const selectedContainer = document.querySelector(`[id*="${toolId}"]`);
+            if (selectedContainer) {
+                selectedContainer.style.display = 'block';
+                setTimeout(() => {
+                    selectedContainer.classList.add('active');
+                    loadIframe(selectedContainer);
+                }, 0);
+            }
+
+            // Update view count
+            updateViewCount(button);
+        });
     });
 
-    // Share Functionality
-    function openShareModal(toolName) {
-        modal.style.display = 'block';
-        modal.dataset.tool = toolName;
-    }
-
-    function closeShareModal() {
-        modal.style.display = 'none';
-    }
-
-    function shareTool(platform) {
-        const toolName = modal.dataset.tool;
-        const toolUrl = window.location.href + '#' + toolName;
+    // Iframe loading function
+    function loadIframe(container) {
+        const placeholder = container.querySelector('.iframe-placeholder');
+        if (!placeholder) return;
         
-        switch(platform) {
+        if (!placeholder.querySelector('iframe')) {
+            const iframe = document.createElement('iframe');
+            iframe.src = placeholder.dataset.src;
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            placeholder.appendChild(iframe);
+        }
+    }
+
+    // View count functionality
+    function updateViewCount(button) {
+        const viewsElement = button.querySelector('.views-count');
+        let views = parseInt(viewsElement.textContent.replace(',', ''));
+        views++;
+        viewsElement.textContent = views.toLocaleString();
+        
+        // Store updated view count
+        const toolId = button.dataset.tool;
+        localStorage.setItem(`${toolId}_views`, views);
+    }
+
+    // Load saved view counts
+    navButtons.forEach(button => {
+        const toolId = button.dataset.tool;
+        const savedViews = localStorage.getItem(`${toolId}_views`);
+        if (savedViews) {
+            button.querySelector('.views-count').textContent = parseInt(savedViews).toLocaleString();
+        }
+    });
+
+    // Share functionality
+    shareButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const toolId = button.dataset.tool;
+            const toolContainer = document.querySelector(`[id*="${toolId}"]`);
+            if (toolContainer) {
+                const iframe = toolContainer.querySelector('.iframe-placeholder');
+                if (iframe) {
+                    openShareModal(iframe.dataset.src);
+                }
+            }
+        });
+    });
+
+    function openShareModal(url) {
+        modal.style.display = 'block';
+        
+        shareOptions.forEach(option => {
+            option.onclick = () => {
+                const platform = option.dataset.platform;
+                shareContent(platform, url);
+            };
+        });
+    }
+
+    function shareContent(platform, url) {
+        const text = 'בדוק את הכלי הפיננסי הזה:';
+        const encodedText = encodeURIComponent(text);
+        const encodedUrl = encodeURIComponent(url);
+        
+        switch (platform) {
             case 'whatsapp':
-                window.open(`https://wa.me/?text=${encodeURIComponent(toolUrl)}`);
+                window.open(`https://wa.me/?text=${encodedText} ${encodedUrl}`);
                 break;
             case 'telegram':
-                window.open(`https://t.me/share/url?url=${encodeURIComponent(toolUrl)}`);
+                window.open(`https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`);
                 break;
             case 'email':
-                window.open(`mailto:?subject=Check out this tool&body=${encodeURIComponent(toolUrl)}`);
+                window.location.href = `mailto:?subject=כלי פיננסי מעניין&body=${encodedText} ${encodedUrl}`;
                 break;
             case 'copy':
-                navigator.clipboard.writeText(toolUrl).then(() => {
-                    alert('הקישור הועתק ללוח!');
+                navigator.clipboard.writeText(url).then(() => {
+                    const option = document.querySelector('[data-platform="copy"]');
+                    const originalText = option.querySelector('span').textContent;
+                    option.querySelector('span').textContent = 'הועתק!';
+                    setTimeout(() => {
+                        option.querySelector('span').textContent = originalText;
+                    }, 2000);
                 });
                 break;
         }
         
-        closeShareModal();
+        modal.style.display = 'none';
     }
 
-    shareButtons.forEach(button => {
-        button.addEventListener('click', () => openShareModal(button.dataset.tool));
-    });
+    // Close modal functionality
+    closeModal.onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
 
-    closeModal.addEventListener('click', closeShareModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeShareModal();
-    });
-
-    shareOptions.forEach(option => {
-        option.addEventListener('click', () => shareTool(option.dataset.platform));
-    });
-
-    // Handle deep linking
-    const hash = window.location.hash.slice(1);
-    if (hash) {
-        const targetButton = document.querySelector(`[data-tool="${hash}"]`);
-        if (targetButton) switchTool(targetButton);
+    // Load initial tool
+    const activeContainer = document.querySelector('.tool-container.active');
+    if (activeContainer) {
+        loadIframe(activeContainer);
     }
 });
